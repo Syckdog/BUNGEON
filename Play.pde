@@ -1,7 +1,7 @@
 void play() {
 
-  background(#5D4F1D);
-  fill(0);
+  background(#75761A);
+  fill(150);
   stroke(0);
   strokeWeight(5);
   rect(100, 100, 600, 600);
@@ -49,28 +49,15 @@ int i
    
    */
   i = 0;
-  while (i < E_bulletList.size()) {
-    E_Bullet r = E_bulletList.get(i);
-    if (r.alive == true) {
+  while (i < B_enemyList.size()) {
+    B_Enemy r = B_enemyList.get(i);
+    if (r.alive == true && r.myRoomx == roomx && r.myRoomy == roomy) {
       r.show();
       r.act();
       i++;
     } else {
-      E_bulletList.remove(i);
+      B_enemyList.remove(i);
     }
-  }
-
-
-
-  i = 0;
-  while (i < m) {
-    darknessList.add(new Darkness());
-    darknessx = darknessx  + 160;
-    if (darknessx == width) {
-      darknessx = 0;
-      darknessy = darknessy + 50;
-    }
-    i++;
   }
 
 
@@ -88,6 +75,15 @@ int i
     }
   }
 
+  i = 0;
+  while (i < d) {
+    Darkness myDarkness = darknessList.get(i);
+    myDarkness.show();
+    myDarkness.act();
+    i++;
+  }
+
+
   float h = map(myHero.hp, 100, 0, 175, 25);
   float m = map(myHero.mana, 100, 0, 175, 25);
 
@@ -100,17 +96,45 @@ int i
   rect(20, 55, 185, 35);
   fill(0, 0, 255);
   rect(25, 60, m, 25);
-  
-  
+
+
+  fill(100);
+  rect(640, 0, 160, 160);
+  for (int r = 0; r < 10; r++) {
+    for (int c = 0; c < 10; c++) {
+      int s = minimap[r][c];
+      if (s==0) fill(255);
+      if (s==1) fill(0);
+      if (s==2) fill(255, 0, 0);
+      if (s==3) fill(0);
+      rect(650 + (14*c), 10 + (14*r), 14, 14);
+    }
+  }
 
   if (myHero.mana > 100) myHero.mana = 100;
   if (myHero.hp > 100) myHero.hp = 100;
+
+
+  fill(255);
+  stroke(0);
+  strokeWeight(3);
+  ellipse (770, 750, 50, 50);
+  image(introbutton, 750, 730);
 }
 
 
 void playClicks() {
   bulletList.add(new Bullet());
   myHero.mana = myHero.mana - 1;
+  if (dist(770, 750, mouseX, mouseY) < 25) {
+    if (introsong.isPlaying()) {
+      introbutton = mute;
+      introsong.pause();
+    } else {
+      introbutton = unmute;
+      introsong.loop();
+    }
+  }
 }
 
 void switchRoom() {
@@ -127,9 +151,15 @@ void switchRoom() {
   if (south != white) s = true;
   if (east  != white) e = true;
   if (west  != white) w = true;
-
-  spawnEnemies();
+  if (here  != white) h = true;
 }
 
 void spawnEnemies() {
+  for (i = 0; i < m; i++) {
+    int x = int(random(0, 3));
+    if (x==0) enemyList.add(new Chaser(roomx, roomy));
+    if (x==1) enemyList.add(new Mage(roomx, roomy));
+    if (x==2) enemyList.add(new Arsonist(roomx, roomy));
+    if (x==3) enemyList.add(new Bull(roomx, roomy));
+  }
 }

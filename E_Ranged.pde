@@ -10,16 +10,9 @@ class Ranged extends Enemy {
   void show() {
     fill(255, 0, 0);
     ellipse(x, y, size, size);
-    textSize(20);
-    fill(0);
-    text(hp, x, y);
   }
 
   void act() {
     super.act();
-      if (hp > 0 && cooldown <= threshold) {
-      E_bulletList.add(new E_Bullet());
-      cooldown = 20;
-    }
   }
 }

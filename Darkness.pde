@@ -1,14 +1,13 @@
 class Darkness {
 
-  float x, y, w, h, a, b;
+  float x, y, w, h, a;
 
   Darkness() {
     a = 255;
-    b = 0;
-    x = myHero.x;
-    y = myHero.y;
-    w = 100;
-    h = 100;
+    x = darknessx;
+    y = darknessy;
+    w = 5;
+    h = 5;
   }
 
   void show() {
@@ -18,6 +17,6 @@ class Darkness {
   }
 
   void act() {
-    
+    a = map(dist(x, y, myHero.x, myHero.y), 0, 200, 0, 255);
   }
 }
